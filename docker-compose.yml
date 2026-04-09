@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  sdk:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - TECNOFACT_API_KEY=${TECNOFACT_API_KEY}
+      - TECNOFACT_API_SECRET=${TECNOFACT_API_SECRET}
+      - TECNOFACT_ENVIRONMENT=${TECNOFACT_ENVIRONMENT:-sandbox}
+    command: pytest --cov=tecnofact --cov-report=html
+
+  dev:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - TECNOFACT_API_KEY=${TECNOFACT_API_KEY}
+      - TECNOFACT_API_SECRET=${TECNOFACT_API_SECRET}
+      - TECNOFACT_ENVIRONMENT=${TECNOFACT_ENVIRONMENT:-sandbox}
+    command: bash
+    stdin_open: true
+    tty: true

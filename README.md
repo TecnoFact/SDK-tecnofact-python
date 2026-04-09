@@ -1,5 +1,12 @@
 # TecnoFact SDK para Facturación Electrónica CFDI 4.0
 
+[![PyPI version](https://badge.fury.io/py/tecnofact-sdk.svg)](https://badge.fury.io/py/tecnofact-sdk)
+[![Python Versions](https://img.shields.io/pypi/pyversions/tecnofact-sdk.svg)](https://pypi.org/project/tecnofact-sdk/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://github.com/TecnoFact/SDK-tecnofact-python/workflows/Tests/badge.svg)](https://github.com/TecnoFact/SDK-tecnofact-python/actions)
+[![codecov](https://codecov.io/gh/TecnoFact/SDK-tecnofact-python/branch/main/graph/badge.svg)](https://codecov.io/gh/TecnoFact/SDK-tecnofact-python)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 SDK oficial de Python para la integración con el servicio de Timbrado CFDI 4.0 de TecnoFact. Facilita la emisión, cancelación y consulta de facturas electrónicas cumpliendo con los requisitos del SAT mexicano.
 
 ## 📋 Tabla de Contenidos
@@ -54,6 +61,23 @@ pip install -e .
 
 ```bash
 pip install -e ".[dev]"
+```
+
+### Usando Docker
+
+```bash
+# Construir la imagen
+docker-compose build
+
+# Ejecutar tests
+docker-compose run --rm sdk
+
+# Entorno de desarrollo interactivo
+docker-compose run --rm dev
+
+# O usando Docker directamente
+docker build -t tecnofact-sdk .
+docker run -v $(pwd):/app tecnofact-sdk pytest
 ```
 
 ## ⚙️ Configuración

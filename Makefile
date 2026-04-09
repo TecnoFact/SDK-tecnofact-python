@@ -1,4 +1,4 @@
-.PHONY: install install-dev test coverage lint format clean build upload help
+.PHONY: install install-dev test coverage lint format clean build upload docker-build docker-test docker-dev help
 
 help:
 	@echo "Comandos disponibles:"
@@ -11,6 +11,9 @@ help:
 	@echo "  make clean         - Limpiar archivos generados"
 	@echo "  make build         - Construir el paquete"
 	@echo "  make upload        - Subir a PyPI"
+	@echo "  make docker-build  - Construir imagen Docker"
+	@echo "  make docker-test   - Ejecutar tests en Docker"
+	@echo "  make docker-dev    - Entorno de desarrollo en Docker"
 
 install:
 	pip install -e .
@@ -48,3 +51,12 @@ build: clean
 
 upload: build
 	twine upload dist/*
+
+docker-build:
+	docker-compose build
+
+docker-test:
+	docker-compose run --rm sdk
+
+docker-dev:
+	docker-compose run --rm dev
