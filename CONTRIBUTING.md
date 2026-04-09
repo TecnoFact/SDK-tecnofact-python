@@ -162,38 +162,55 @@ Para solicitar nuevas funcionalidades:
 
 ## 📝 Commits
 
-### Formato de Mensajes de Commit
+### Conventional Commits
 
-Usa mensajes de commit descriptivos siguiendo este formato:
+Este proyecto usa [Conventional Commits](https://www.conventionalcommits.org/) para versionado automático.
 
+**Formato:**
 ```
-tipo(alcance): descripción breve
+<tipo>[alcance opcional]: <descripción>
 
-Descripción más detallada si es necesaria.
+[cuerpo opcional]
 
-Fixes #123
+[nota(s) al pie opcional(es)]
 ```
 
-**Tipos:**
-- `feat`: Nueva funcionalidad
-- `fix`: Corrección de bug
-- `docs`: Cambios en documentación
-- `style`: Formateo, punto y coma faltante, etc.
-- `refactor`: Refactorización de código
-- `test`: Agregar o modificar tests
-- `chore`: Mantenimiento, dependencias, etc.
+**Tipos y su impacto en versión:**
+- `feat:` → Incrementa MINOR (0.X.0) - Nueva funcionalidad
+- `fix:` → Incrementa PATCH (0.0.X) - Corrección de bug
+- `perf:` → Incrementa PATCH (0.0.X) - Mejora de rendimiento
+- `docs:` → Incrementa PATCH (0.0.X) - Cambios en documentación
+- `style:` → Incrementa PATCH (0.0.X) - Formateo de código
+- `refactor:` → Incrementa PATCH (0.0.X) - Refactorización
+- `test:` → Incrementa PATCH (0.0.X) - Tests
+- `build:` → Incrementa PATCH (0.0.X) - Sistema de build
+- `ci:` → Incrementa PATCH (0.0.X) - CI/CD
+- `chore:` → No genera release - Mantenimiento
+- `BREAKING CHANGE:` → Incrementa MAJOR (X.0.0) - Cambio incompatible
 
 **Ejemplos:**
 
-```
+```bash
+# Feature (MINOR)
 feat(models): agregar modelo para complemento de pago
 
+# Fix (PATCH)
 fix(http): corregir manejo de timeout en requests
 
+# Breaking Change (MAJOR)
+feat(config)!: cambiar estructura de configuración
+
+BREAKING CHANGE: Config ahora requiere api_version.
+Migración: agregar api_version='4.0' al constructor.
+
+# Documentation (PATCH)
 docs(readme): actualizar ejemplos de uso
 
-test(config): agregar tests para validación de timeout
+# Chore (no release)
+chore: actualizar dependencias
 ```
+
+Ver [VERSIONING.md](VERSIONING.md) para más detalles sobre versionado automático.
 
 ## 🏗️ Estructura del Proyecto
 

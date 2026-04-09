@@ -1,0 +1,57 @@
+name: Version Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'pyproject.toml'
+      - 'src/tecnofact/__init__.py'
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Extract versions
+      id: versions
+      run: |
+        PYPROJECT_VERSION=$(grep -Po '(?<=version = ")[^"]*' pyproject.toml)
+        INIT_VERSION=$(grep -Po '(?<=__version__ = ")[^"]*' src/tecnofact/__init__.py)
+        echo "pyproject_version=$PYPROJECT_VERSION" >> $GITHUB_OUTPUT
+        echo "init_version=$INIT_VERSION" >> $GITHUB_OUTPUT
+    
+    - name: Check version consistency
+      run: |
+        if [ "${{ steps.versions.outputs.pyproject_version }}" != "${{ steps.versions.outputs.init_version }}" ]; then
+          echo "❌ Version mismatch!"
+          echo "pyproject.toml: ${{ steps.versions.outputs.pyproject_version }}"
+          echo "__init__.py: ${{ steps.versions.outputs.init_version }}"
+          exit 1
+        else
+          echo "✅ Versions are consistent: ${{ steps.versions.outputs.pyproject_version }}"
+        fi
+    
+    - name: Check version bump
+      run: |
+        git fetch origin main
+        CURRENT_VERSION=$(git show origin/main:pyproject.toml | grep -Po '(?<=version = ")[^"]*')
+        NEW_VERSION="${{ steps.versions.outputs.pyproject_version }}"
+        
+        echo "Current version: $CURRENT_VERSION"
+        echo "New version: $NEW_VERSION"
+        
+        if [ "$CURRENT_VERSION" = "$NEW_VERSION" ]; then
+          echo "⚠️ Warning: Version has not been bumped"
+          echo "Please update the version in pyproject.toml and __init__.py"
+          exit 1
+        fi

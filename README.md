@@ -347,9 +347,14 @@ Las contribuciones son bienvenidas. Por favor:
 
 1. Fork el proyecto
 2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+3. Commit tus cambios usando [Conventional Commits](https://www.conventionalcommits.org/)
+   ```bash
+   git commit -m 'feat(models): add some amazing feature'
+   ```
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
+
+**Nota:** Este proyecto usa versionado automático basado en commits. Ver [VERSIONING.md](VERSIONING.md) para más detalles.
 
 ### Estándares de Código
 

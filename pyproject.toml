@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tecnofact-sdk"
 version = "1.0.0"
+dynamic = ["version"]
 description = "SDK oficial de Python para la integración con el servicio de Timbrado CFDI 4.0 de TecnoFact"
 readme = "README.md"
 license = {text = "MIT"}
@@ -66,6 +67,59 @@ package-dir = {"" = "src"}
 where = ["src"]
 include = ["tecnofact*"]
 exclude = ["tests*"]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+version_variables = ["src/tecnofact/__init__.py:__version__"]
+build_command = "pip install build && python -m build"
+major_on_zero = false
+branch = "main"
+upload_to_vcs_release = true
+upload_to_pypi = false
+commit_message = "chore(release): {version}\n\n[skip ci]"
+
+[tool.semantic_release.branches.main]
+match = "main"
+prerelease = false
+
+[tool.semantic_release.changelog]
+template_dir = "templates"
+changelog_file = "CHANGELOG.md"
+exclude_commit_patterns = [
+    "^chore\\(release\\):",
+    "^Merge pull request",
+    "^Merge branch",
+]
+
+[tool.semantic_release.changelog.environment]
+block_start_string = "{%"
+block_end_string = "%}"
+variable_start_string = "{{"
+variable_end_string = "}}"
+comment_start_string = "{#"
+comment_end_string = "#}"
+trim_blocks = false
+lstrip_blocks = false
+newline_sequence = "\n"
+keep_trailing_newline = false
+extensions = []
+autoescape = true
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = [
+    "build",
+    "chore",
+    "ci",
+    "docs",
+    "feat",
+    "fix",
+    "perf",
+    "style",
+    "refactor",
+    "test",
+]
+minor_tags = ["feat"]
+patch_tags = ["fix", "perf"]
 
 [tool.black]
 line-length = 100

@@ -1,0 +1,66 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          {"type": "feat", "release": "minor"},
+          {"type": "fix", "release": "patch"},
+          {"type": "perf", "release": "patch"},
+          {"type": "revert", "release": "patch"},
+          {"type": "docs", "release": "patch"},
+          {"type": "style", "release": "patch"},
+          {"type": "refactor", "release": "patch"},
+          {"type": "test", "release": "patch"},
+          {"type": "build", "release": "patch"},
+          {"type": "ci", "release": "patch"},
+          {"type": "chore", "release": false},
+          {"breaking": true, "release": "major"}
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            {"type": "feat", "section": "✨ Features"},
+            {"type": "fix", "section": "🐛 Bug Fixes"},
+            {"type": "perf", "section": "⚡ Performance Improvements"},
+            {"type": "revert", "section": "⏪ Reverts"},
+            {"type": "docs", "section": "📚 Documentation"},
+            {"type": "style", "section": "💎 Styles"},
+            {"type": "refactor", "section": "♻️ Code Refactoring"},
+            {"type": "test", "section": "✅ Tests"},
+            {"type": "build", "section": "🔧 Build System"},
+            {"type": "ci", "section": "👷 CI/CD"}
+          ]
+        }
+      }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md",
+        "changelogTitle": "# Changelog\n\nTodos los cambios notables en este proyecto serán documentados en este archivo.\n\nEl formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),\ny este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/)."
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "sed -i 's/__version__ = \".*\"/__version__ = \"${nextRelease.version}\"/' src/tecnofact/__init__.py"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "pyproject.toml", "src/tecnofact/__init__.py"],
+        "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}\n\n[skip ci]"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
