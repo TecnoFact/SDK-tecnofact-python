@@ -46,7 +46,11 @@ SDK oficial de Python para la integración con el servicio de Timbrado CFDI 4.0 
 ### Usando pip
 
 ```bash
+# Instalación desde PyPI
 pip install tecnofact-sdk
+
+# O especificando una versión
+pip install tecnofact-sdk==1.0.0
 ```
 
 ### Desde el código fuente

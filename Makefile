@@ -1,4 +1,4 @@
-.PHONY: install install-dev test coverage lint format clean build upload docker-build docker-test docker-dev help
+.PHONY: install install-dev test coverage lint format clean build upload check verify docker-build docker-test docker-dev help
 
 help:
 	@echo "Comandos disponibles:"
@@ -8,9 +8,12 @@ help:
 	@echo "  make coverage      - Ejecutar tests con cobertura"
 	@echo "  make lint          - Ejecutar linters (flake8, mypy)"
 	@echo "  make format        - Formatear código (black, isort)"
+	@echo "  make check         - Verificar el paquete antes de publicar"
+	@echo "  make verify        - Verificar todo (lint + test + check)"
 	@echo "  make clean         - Limpiar archivos generados"
 	@echo "  make build         - Construir el paquete"
 	@echo "  make upload        - Subir a PyPI"
+	@echo "  make upload-test   - Subir a TestPyPI (prueba)"
 	@echo "  make docker-build  - Construir imagen Docker"
 	@echo "  make docker-test   - Ejecutar tests en Docker"
 	@echo "  make docker-dev    - Entorno de desarrollo en Docker"
@@ -46,11 +49,27 @@ clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 
-build: clean
-	python setup.py sdist bdist_wheel
+check:
+	@echo "Verificando MANIFEST.in..."
+	check-manifest
+	@echo "Verificando metadata del paquete..."
+	python -m build --sdist --wheel
+	twine check dist/*
 
-upload: build
+verify: lint test check
+	@echo "✓ Todas las verificaciones pasaron"
+
+build: clean
+	@echo "Construyendo el paquete..."
+	python -m build
+
+upload: verify build
+	@echo "Subiendo a PyPI..."
 	twine upload dist/*
+
+upload-test: verify build
+	@echo "Subiendo a TestPyPI..."
+	twine upload --repository testpypi dist/*
 
 docker-build:
 	docker-compose build

@@ -135,3 +135,6 @@ Thumbs.db
 
 # Temporary PHP SDK
 temp-php-sdk/
+
+# PyPI credentials
+.pypirc

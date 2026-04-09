@@ -1,6 +1,71 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=77.0.3", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "tecnofact-sdk"
+version = "1.0.0"
+description = "SDK oficial de Python para la integración con el servicio de Timbrado CFDI 4.0 de TecnoFact"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "TecnoFact", email = "soporte@tecnofact.com"}
+]
+maintainers = [
+    {name = "TecnoFact", email = "soporte@tecnofact.com"}
+]
+keywords = ["cfdi", "facturacion", "electronica", "sat", "mexico", "timbrado", "tecnofact"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Office/Business :: Financial",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "Typing :: Typed",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.1",
+    "black>=23.7.0",
+    "flake8>=6.1.0",
+    "mypy>=1.5.0",
+    "isort>=5.12.0",
+    "types-requests>=2.31.0",
+    "build>=1.0.0",
+    "twine>=4.0.0",
+    "check-manifest>=0.49",
+]
+
+[project.urls]
+Homepage = "https://github.com/TecnoFact/SDK-tecnofact-python"
+Documentation = "https://github.com/TecnoFact/SDK-tecnofact-python#readme"
+Repository = "https://github.com/TecnoFact/SDK-tecnofact-python"
+"Bug Tracker" = "https://github.com/TecnoFact/SDK-tecnofact-python/issues"
+Changelog = "https://github.com/TecnoFact/SDK-tecnofact-python/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["tecnofact*"]
+exclude = ["tests*"]
 
 [tool.black]
 line-length = 100
