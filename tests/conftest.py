@@ -8,11 +8,11 @@ from tecnofact.models import Emisor, Receptor, Concepto
 @pytest.fixture
 def sample_config():
     return Config(
-        api_key="test_api_key",
-        api_secret="test_api_secret",
-        environment=Environment.SANDBOX,
+        email="test@example.com",
+        password="test_password",
+        environment=Environment.PRODUCTION,
         timeout=30,
-        retries=3
+        retries=3,
     )
 
 
@@ -22,7 +22,7 @@ def sample_emisor():
         rfc="XAXX010101000",
         nombre="EMPRESA EMISORA SA DE CV",
         regimen_fiscal="601",
-        cp="06300"
+        cp="06300",
     )
 
 
@@ -33,7 +33,7 @@ def sample_receptor():
         nombre="CLIENTE RECEPTOR",
         uso_cfdi="G03",
         domicilio_fiscal_receptor="06300",
-        regimen_fiscal_receptor="612"
+        regimen_fiscal_receptor="612",
     )
 
 
@@ -46,5 +46,5 @@ def sample_concepto():
         descripcion="Servicio de desarrollo de software",
         valor_unitario=Decimal("10000.00"),
         importe=Decimal("10000.00"),
-        objeto_imp="02"
+        objeto_imp="02",
     )

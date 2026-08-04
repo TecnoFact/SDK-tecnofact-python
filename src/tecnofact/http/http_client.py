@@ -8,7 +8,7 @@ from ..exceptions import (
     NotFoundException,
     RateLimitException,
     ServerException,
-    TecnoFactException
+    TecnoFactException,
 )
 
 
@@ -21,8 +21,14 @@ class HttpClient(HttpClientInterface):
         self.session.headers.update({
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "X-API-Key": config.api_key,
-            "X-API-Secret": config.api_secret
+        })
+        self._token: Optional[str] = None
+
+    def set_token(self, token: str) -> None:
+        """Set the Bearer token obtained from AuthService.login()."""
+        self._token = token
+        self.session.headers.update({
+            "Authorization": f"Bearer {token}",
         })
 
     def _handle_response(self, response: requests.Response) -> Dict[str, Any]:
@@ -35,37 +41,37 @@ class HttpClient(HttpClientInterface):
             raise AuthenticationException(
                 message=data.get("message", "Authentication failed"),
                 code=response.status_code,
-                details=data
+                details=data,
             )
         elif response.status_code == 400:
             raise ValidationException(
                 message=data.get("message", "Validation error"),
                 code=response.status_code,
-                details=data
+                details=data,
             )
         elif response.status_code == 404:
             raise NotFoundException(
                 message=data.get("message", "Resource not found"),
                 code=response.status_code,
-                details=data
+                details=data,
             )
         elif response.status_code == 429:
             raise RateLimitException(
                 message=data.get("message", "Rate limit exceeded"),
                 code=response.status_code,
-                details=data
+                details=data,
             )
         elif response.status_code >= 500:
             raise ServerException(
                 message=data.get("message", "Server error"),
                 code=response.status_code,
-                details=data
+                details=data,
             )
         elif not response.ok:
             raise TecnoFactException(
                 message=data.get("message", "Request failed"),
                 code=response.status_code,
-                details=data
+                details=data,
             )
 
         return data
@@ -74,10 +80,10 @@ class HttpClient(HttpClientInterface):
         self,
         endpoint: str,
         data: Dict[str, Any],
-        headers: Optional[Dict[str, str]] = None
+        headers: Optional[Dict[str, str]] = None,
     ) -> Dict[str, Any]:
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
-        request_headers = self.session.headers.copy()
+        request_headers = dict(self.session.headers)
         if headers:
             request_headers.update(headers)
 
@@ -85,7 +91,7 @@ class HttpClient(HttpClientInterface):
             url,
             json=data,
             headers=request_headers,
-            timeout=self.timeout
+            timeout=self.timeout,
         )
         return self._handle_response(response)
 
@@ -93,10 +99,10 @@ class HttpClient(HttpClientInterface):
         self,
         endpoint: str,
         params: Optional[Dict[str, Any]] = None,
-        headers: Optional[Dict[str, str]] = None
+        headers: Optional[Dict[str, str]] = None,
     ) -> Dict[str, Any]:
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
-        request_headers = self.session.headers.copy()
+        request_headers = dict(self.session.headers)
         if headers:
             request_headers.update(headers)
 
@@ -104,7 +110,7 @@ class HttpClient(HttpClientInterface):
             url,
             params=params,
             headers=request_headers,
-            timeout=self.timeout
+            timeout=self.timeout,
         )
         return self._handle_response(response)
 
@@ -112,10 +118,10 @@ class HttpClient(HttpClientInterface):
         self,
         endpoint: str,
         data: Dict[str, Any],
-        headers: Optional[Dict[str, str]] = None
+        headers: Optional[Dict[str, str]] = None,
     ) -> Dict[str, Any]:
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
-        request_headers = self.session.headers.copy()
+        request_headers = dict(self.session.headers)
         if headers:
             request_headers.update(headers)
 
@@ -123,23 +129,23 @@ class HttpClient(HttpClientInterface):
             url,
             json=data,
             headers=request_headers,
-            timeout=self.timeout
+            timeout=self.timeout,
         )
         return self._handle_response(response)
 
     def delete(
         self,
         endpoint: str,
-        headers: Optional[Dict[str, str]] = None
+        headers: Optional[Dict[str, str]] = None,
     ) -> Dict[str, Any]:
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
-        request_headers = self.session.headers.copy()
+        request_headers = dict(self.session.headers)
         if headers:
             request_headers.update(headers)
 
         response = self.session.delete(
             url,
             headers=request_headers,
-            timeout=self.timeout
+            timeout=self.timeout,
         )
         return self._handle_response(response)
