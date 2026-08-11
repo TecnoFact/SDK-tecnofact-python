@@ -1,8 +1,15 @@
 from dataclasses import dataclass
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, TypedDict
 from decimal import Decimal
 from .traslado_global import TrasladoGlobal
 from .retencion_global import RetencionGlobal
+
+
+class ImpuestosData(TypedDict, total=False):
+    total_impuestos_trasladados: float
+    total_impuestos_retenidos: float
+    traslados: List[Dict[str, Any]]
+    retenciones: List[Dict[str, Any]]
 
 
 @dataclass
@@ -12,8 +19,8 @@ class Impuestos:
     traslados: Optional[List[TrasladoGlobal]] = None
     retenciones: Optional[List[RetencionGlobal]] = None
 
-    def to_dict(self) -> Dict[str, Any]:
-        data = {}
+    def to_dict(self) -> ImpuestosData:
+        data: ImpuestosData = {}
         if self.total_impuestos_trasladados is not None:
             data["total_impuestos_trasladados"] = float(self.total_impuestos_trasladados)
         if self.total_impuestos_retenidos is not None:

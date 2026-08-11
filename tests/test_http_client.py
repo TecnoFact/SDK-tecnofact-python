@@ -211,3 +211,14 @@ class TestHttpClient:
             http_client.post("/test", {})
 
         assert exc_info.value.code == 500
+
+    def test_post_rejects_non_object_json_response(self):
+        client = HttpClient(Config(email="test@example.com", password="secret"))
+        client.session.post = Mock(return_value=Mock(
+            ok=True,
+            status_code=200,
+            json=Mock(return_value=["unexpected"]),
+        ))
+
+        with pytest.raises(TecnoFactException, match="Response JSON must be an object"):
+            client.post("/test", {})

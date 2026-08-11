@@ -11,7 +11,7 @@ class Config:
     timeout: int = 30
     retries: int = 3
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.email:
             raise ValueError("email is required")
         if not self.password:

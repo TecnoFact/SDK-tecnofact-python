@@ -37,6 +37,12 @@ class HttpClient(HttpClientInterface):
         except ValueError:
             data = {"message": response.text}
 
+        if not isinstance(data, dict):
+            raise TecnoFactException(
+                message="Response JSON must be an object",
+                code=response.status_code,
+            )
+
         if response.status_code == 401:
             raise AuthenticationException(
                 message=data.get("message", "Authentication failed"),
