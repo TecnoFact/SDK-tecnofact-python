@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from ..http.http_client import HttpClient
 from ..exceptions import TimbradoException
 from ..xml.cfdi_xml_builder import CfdiXmlBuilder
@@ -27,7 +27,7 @@ class CfdiService:
     def __init__(
         self,
         http_client: HttpClient,
-        xml_builder: CfdiXmlBuilder | None = None,
+        xml_builder: Optional[CfdiXmlBuilder] = None,
     ):
         self._http = http_client
         self._builder = xml_builder or CfdiXmlBuilder()

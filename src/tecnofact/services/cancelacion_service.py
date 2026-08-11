@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from ..http.http_client import HttpClient
 from ..exceptions import CancelacionException
 
@@ -31,7 +31,7 @@ class CancelacionService:
         uuid: str,
         rfc_emisor: str,
         motivo: str,
-        folio_sustitucion: str | None = None,
+        folio_sustitucion: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Request cancellation for a stamped CFDI.
 
