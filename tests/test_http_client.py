@@ -18,9 +18,9 @@ class TestHttpClient:
     @pytest.fixture
     def config(self):
         return Config(
-            api_key="test_key",
-            api_secret="test_secret",
-            environment=Environment.SANDBOX
+            email="test@example.com",
+            password="secret",
+            environment=Environment.PRODUCTION,
         )
 
     @pytest.fixture
@@ -29,10 +29,10 @@ class TestHttpClient:
 
     def test_http_client_initialization(self, http_client, config):
         assert http_client.config == config
-        assert http_client.base_url == "https://sandbox.tecnofact.com/api"
+        assert http_client.base_url == "https://panelcfdi.tecnofact.mx"
         assert http_client.timeout == 30
-        assert http_client.session.headers["X-API-Key"] == "test_key"
-        assert http_client.session.headers["X-API-Secret"] == "test_secret"
+        assert http_client.session.headers["Content-Type"] == "application/json"
+        assert http_client.session.headers["Accept"] == "application/json"
 
     @patch('requests.Session.post')
     def test_post_success(self, mock_post, http_client):

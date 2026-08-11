@@ -4,32 +4,24 @@ from tecnofact.enums import Environment, TipoComprobante
 
 class TestEnvironment:
     def test_environment_values(self):
-        assert Environment.SANDBOX.value == "sandbox"
+        assert list(Environment) == [Environment.PRODUCTION]
         assert Environment.PRODUCTION.value == "production"
 
     def test_is_production(self):
         assert Environment.PRODUCTION.is_production() is True
-        assert Environment.SANDBOX.is_production() is False
-
-    def test_is_sandbox(self):
-        assert Environment.SANDBOX.is_sandbox() is True
-        assert Environment.PRODUCTION.is_sandbox() is False
 
     def test_label(self):
-        assert Environment.SANDBOX.label() == "Sandbox"
         assert Environment.PRODUCTION.label() == "Producción"
 
     def test_get_base_url(self):
-        assert Environment.SANDBOX.get_base_url() == "https://sandbox.tecnofact.com/api"
-        assert Environment.PRODUCTION.get_base_url() == "https://api.tecnofact.com/api"
+        assert Environment.PRODUCTION.get_base_url() == "https://panelcfdi.tecnofact.mx"
 
     def test_environment_equality(self):
-        env1 = Environment.SANDBOX
-        env2 = Environment.SANDBOX
-        env3 = Environment.PRODUCTION
-        
+        env1 = Environment.PRODUCTION
+        env2 = Environment("production")
+
         assert env1 == env2
-        assert env1 != env3
+        assert env1 is Environment.PRODUCTION
 
 
 class TestTipoComprobante:
