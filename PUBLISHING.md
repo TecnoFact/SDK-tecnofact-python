@@ -20,7 +20,7 @@ Esta guía explica cómo publicar el SDK de TecnoFact en PyPI.
 
 ## 🔄 Flujo de publicación
 
-El proyecto usa **releases manuales en GitHub** y **Trusted Publishing** para subir a PyPI.
+El proyecto usa **releases automáticos en GitHub** y **Trusted Publishing** para subir a PyPI.
 
 ### 1. Preparar el bump de versión
 
@@ -44,16 +44,17 @@ Abrir un pull request hacia `main`. El workflow `Version Check` verificará que 
 
 Una vez aprobado el PR, mergear a `main`. Los workflows `Tests` y `Version Check` deben estar en verde.
 
-### 3. Crear el release en GitHub
+### 3. Release automático
 
-Ir a https://github.com/TecnoFact/SDK-tecnofact-python/releases/new y crear un release:
+Una vez mergeado el PR a `main`, el workflow `.github/workflows/create-release.yml` se ejecuta automáticamente:
 
-- **Tag:** `v1.1.0`
-- **Target:** `main`
-- **Title:** `Release 1.1.0`
-- **Description:** Copiar los cambios desde `CHANGELOG.md`
+1. Lee la versión actual de `pyproject.toml`.
+2. La compara con el último tag existente.
+3. Si la versión cambió, crea el tag `vX.Y.Z` y el release en GitHub.
 
-Publicar el release. Esto dispara automáticamente el workflow `.github/workflows/publish.yml`.
+La creación del release dispara automáticamente el workflow `.github/workflows/publish.yml`, que se encarga de publicar en PyPI.
+
+No es necesario crear el release ni el tag manualmente.
 
 ### 4. Verificar la publicación
 
@@ -125,7 +126,7 @@ Antes de cada publicación, verificar:
 - [ ] Versión actualizada en `pyproject.toml` y `src/tecnofact/__init__.py`
 - [ ] `CHANGELOG.md` actualizado
 - [ ] PR aprobado y mergeado a `main`
-- [ ] Release creado en GitHub con el tag correcto
+- [ ] Workflow `Create Release` creó el tag y el release en GitHub
 - [ ] Workflow `Publish to PyPI` finalizó correctamente
 - [ ] Paquete disponible en https://pypi.org/project/tecnofact-sdk/
 
