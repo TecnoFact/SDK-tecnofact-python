@@ -9,7 +9,7 @@ Esta guía explica cómo publicar el SDK de TecnoFact en PyPI.
    - Crear cuenta en https://test.pypi.org/account/register/ (para pruebas)
 
 2. **Configurar Trusted Publishing en PyPI**
-   - Ir a https://pypi.org/manage/project/tecnofact-sdk/publishing/
+   - Ir a https://pypi.org/manage/project/sdk-tecnofact-python/publishing/
    - Agregar un "Trusted Publisher" con estos datos:
      - **Owner:** `TecnoFact`
      - **Repository name:** `SDK-tecnofact-python`
@@ -68,12 +68,12 @@ Se puede ver el progreso en la pestaña **Actions** del repositorio.
 
 ### 5. Confirmar en PyPI
 
-Visitar https://pypi.org/project/tecnofact-sdk/ y verificar que la nueva versión esté disponible.
+Visitar https://pypi.org/project/sdk-tecnofact-python/ y verificar que la nueva versión esté disponible.
 
 Probar la instalación:
 
 ```bash
-pip install tecnofact-sdk
+pip install sdk-tecnofact-python
 ```
 
 ## 🧪 Probar en TestPyPI (opcional)
@@ -128,7 +128,7 @@ Antes de cada publicación, verificar:
 - [ ] PR aprobado y mergeado a `main`
 - [ ] Workflow `Create Release` creó el tag y el release en GitHub
 - [ ] Workflow `Publish to PyPI` finalizó correctamente
-- [ ] Paquete disponible en https://pypi.org/project/tecnofact-sdk/
+- [ ] Paquete disponible en https://pypi.org/project/sdk-tecnofact-python/
 
 ## 📚 Referencias
 
