@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tecnofact-sdk"
-version = "1.0.0"
+version = "1.1.0"
 description = "SDK oficial de Python para la integración con el servicio de Timbrado CFDI 4.0 de TecnoFact"
 readme = "README.md"
 license = {text = "MIT"}
