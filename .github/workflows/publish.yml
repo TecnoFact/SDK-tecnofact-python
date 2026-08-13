@@ -63,7 +63,7 @@ jobs:
     needs: build
     environment:
       name: pypi
-      url: https://pypi.org/p/tecnofact-sdk
+      url: https://pypi.org/p/SDK-tecnofact-python
     permissions:
       id-token: write
     steps:
