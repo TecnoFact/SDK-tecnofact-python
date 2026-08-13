@@ -7,6 +7,8 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-08-13
+
 ### Agregado
 
 #### Complemento de Pagos 2.0 (TipoDeComprobante = "P")
@@ -106,4 +108,5 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Manejo robusto de errores
 - Serialización a diccionarios
 
+[1.1.0]: https://github.com/TecnoFact/SDK-tecnofact-python/releases/tag/v1.1.0
 [1.0.0]: https://github.com/TecnoFact/SDK-tecnofact-python/releases/tag/v1.0.0

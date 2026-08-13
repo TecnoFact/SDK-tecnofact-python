@@ -6,7 +6,7 @@ from .services.cfdi_service import CfdiService
 from .services.cancelacion_service import CancelacionService
 from .xml.cfdi_xml_builder import CfdiXmlBuilder
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __all__ = [
     "Config",
     "Environment",
