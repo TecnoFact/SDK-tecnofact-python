@@ -8,136 +8,112 @@ Esta guía explica cómo publicar el SDK de TecnoFact en PyPI.
    - Crear cuenta en https://pypi.org/account/register/
    - Crear cuenta en https://test.pypi.org/account/register/ (para pruebas)
 
-2. **API Tokens**
-   - Generar token en https://pypi.org/manage/account/token/
-   - Generar token en https://test.pypi.org/manage/account/token/
+2. **Configurar Trusted Publishing en PyPI**
+   - Ir a https://pypi.org/manage/project/tecnofact-sdk/publishing/
+   - Agregar un "Trusted Publisher" con estos datos:
+     - **Owner:** `TecnoFact`
+     - **Repository name:** `SDK-tecnofact-python`
+     - **Workflow name:** `publish.yml`
+     - **Environment name:** `pypi`
 
-3. **Configurar credenciales**
-   ```bash
-   # Copiar el archivo de ejemplo
-   cp .pypirc.example ~/.pypirc
-   
-   # Editar y agregar tus tokens
-   nano ~/.pypirc
-   ```
+   Esto permite que GitHub Actions publique en PyPI sin necesidad de guardar tokens de API en los secretos del repositorio.
 
-## 🔍 Verificación Pre-publicación
+## 🔄 Flujo de publicación
 
-Antes de publicar, ejecutar todas las verificaciones:
+El proyecto usa **releases manuales en GitHub** y **Trusted Publishing** para subir a PyPI.
+
+### 1. Preparar el bump de versión
+
+Crear una rama y actualizar la versión en ambos archivos:
+
+- `pyproject.toml` → campo `version`
+- `src/tecnofact/__init__.py` → variable `__version__`
+
+También actualizar `CHANGELOG.md` con los cambios de la nueva versión.
 
 ```bash
-# Verificar todo (linting, tests, manifest, metadata)
-make verify
-
-# O paso por paso:
-make lint      # Verificar estilo de código
-make test      # Ejecutar tests
-make check     # Verificar MANIFEST.in y metadata
+git checkout -b bump/v1.1.0
+git add pyproject.toml src/tecnofact/__init__.py CHANGELOG.md
+git commit -m "chore: bump version to 1.1.0"
+git push origin bump/v1.1.0
 ```
 
-## 🧪 Publicar en TestPyPI (Recomendado primero)
+Abrir un pull request hacia `main`. El workflow `Version Check` verificará que ambas versiones coincidan y que se haya incrementado respecto a `main`.
 
-TestPyPI es un entorno de prueba para practicar la publicación:
+### 2. Mergear a `main`
+
+Una vez aprobado el PR, mergear a `main`. Los workflows `Tests` y `Version Check` deben estar en verde.
+
+### 3. Crear el release en GitHub
+
+Ir a https://github.com/TecnoFact/SDK-tecnofact-python/releases/new y crear un release:
+
+- **Tag:** `v1.1.0`
+- **Target:** `main`
+- **Title:** `Release 1.1.0`
+- **Description:** Copiar los cambios desde `CHANGELOG.md`
+
+Publicar el release. Esto dispara automáticamente el workflow `.github/workflows/publish.yml`.
+
+### 4. Verificar la publicación
+
+El workflow `Publish to PyPI`:
+
+1. Ejecuta los tests en Python 3.8, 3.9, 3.10, 3.11 y 3.12.
+2. Construye el paquete con `python -m build`.
+3. Publica los artefactos en PyPI usando Trusted Publishing.
+
+Se puede ver el progreso en la pestaña **Actions** del repositorio.
+
+### 5. Confirmar en PyPI
+
+Visitar https://pypi.org/project/tecnofact-sdk/ y verificar que la nueva versión esté disponible.
+
+Probar la instalación:
 
 ```bash
-# 1. Limpiar builds anteriores
+pip install tecnofact-sdk
+```
+
+## 🧪 Probar en TestPyPI (opcional)
+
+Para validar la publicación antes de hacerla oficial, se puede construir e instalar localmente:
+
+```bash
 make clean
-
-# 2. Construir el paquete
+make verify
 make build
-
-# 3. Subir a TestPyPI
 make upload-test
 ```
 
-### Probar la instalación desde TestPyPI
+O bien, crear un release de pre-release en GitHub (por ejemplo, `v1.1.0-rc.1`). El workflow `publish.yml` se dispara igual, pero PyPI no acepta versiones de pre-release a menos que el proyecto esté configurado para ello.
 
-```bash
-# Crear un entorno virtual de prueba
-python -m venv test-env
-source test-env/bin/activate  # En Windows: test-env\Scripts\activate
+## 🔧 Solución de Problemas
 
-# Instalar desde TestPyPI
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ tecnofact-sdk
+### Error: "File already exists"
 
-# Probar que funciona
-python -c "from tecnofact import Config, Environment; print('OK')"
-```
+- Ya existe esa versión en PyPI.
+- Incrementar el número de versión en `pyproject.toml` y `src/tecnofact/__init__.py`.
 
-## 🚀 Publicar en PyPI (Producción)
+### Error: "Invalid distribution"
 
-Una vez verificado en TestPyPI:
+- Ejecutar `make check` para ver detalles.
+- Verificar que `README.md` sea Markdown válido.
+- Verificar que todos los archivos necesarios estén en `MANIFEST.in`.
 
-```bash
-# 1. Asegurar que la versión en pyproject.toml es correcta
-# 2. Actualizar CHANGELOG.md
-# 3. Crear un tag de git
+### Error: "Authentication failed"
 
-git tag -a v1.0.0 -m "Release version 1.0.0"
-git push origin v1.0.0
+- Verificar que el Trusted Publisher esté configurado en PyPI con los datos correctos:
+  - Owner: `TecnoFact`
+  - Repository: `SDK-tecnofact-python`
+  - Workflow: `publish.yml`
+  - Environment: `pypi`
+- Verificar que el job de publicación en `publish.yml` tenga `permissions: id-token: write`.
 
-# 4. Publicar
-make upload
-```
+### El workflow no se ejecuta al crear el release
 
-## 📦 Verificar la publicación
-
-1. Visitar https://pypi.org/project/tecnofact-sdk/
-2. Verificar que la metadata se muestra correctamente
-3. Probar instalación:
-   ```bash
-   pip install tecnofact-sdk
-   ```
-
-## 🔄 Publicar una nueva versión
-
-1. **Actualizar versión**
-   - Editar `pyproject.toml` → cambiar `version`
-   - Editar `src/tecnofact/__init__.py` → cambiar `__version__`
-
-2. **Actualizar CHANGELOG.md**
-   ```markdown
-   ## [1.1.0] - 2024-XX-XX
-   ### Added
-   - Nueva funcionalidad X
-   ### Fixed
-   - Corrección de bug Y
-   ```
-
-3. **Commit y tag**
-   ```bash
-   git add .
-   git commit -m "chore: bump version to 1.1.0"
-   git tag -a v1.1.0 -m "Release version 1.1.0"
-   git push origin main
-   git push origin v1.1.0
-   ```
-
-4. **Publicar**
-   ```bash
-   make clean
-   make verify
-   make upload
-   ```
-
-## 🤖 Publicación Automática con GitHub Actions
-
-El proyecto ya tiene configurado GitHub Actions para publicación automática:
-
-1. **Crear un Release en GitHub**
-   - Ir a https://github.com/TecnoFact/SDK-tecnofact-python/releases/new
-   - Tag: `v1.0.0`
-   - Title: `Release 1.0.0`
-   - Description: Copiar desde CHANGELOG.md
-   - Publicar release
-
-2. **Configurar secreto en GitHub**
-   - Ir a Settings → Secrets → Actions
-   - Agregar `PYPI_API_TOKEN` con tu token de PyPI
-
-3. **El workflow se ejecutará automáticamente**
-   - Construirá el paquete
-   - Lo publicará en PyPI
+- Verificar que el release se haya publicado (no guardado como borrador).
+- Revisar en **Actions** → **Publish to PyPI** si hay algún error.
 
 ## ✅ Checklist de Publicación
 
@@ -145,37 +121,17 @@ Antes de cada publicación, verificar:
 
 - [ ] Tests pasan (`make test`)
 - [ ] Linting pasa (`make lint`)
-- [ ] MANIFEST.in está actualizado (`make check`)
-- [ ] Versión actualizada en `pyproject.toml` y `__init__.py`
-- [ ] CHANGELOG.md actualizado
-- [ ] README.md actualizado si es necesario
-- [ ] Commit y push de todos los cambios
-- [ ] Tag de git creado
-- [ ] Probado en TestPyPI
-- [ ] Verificación final (`make verify`)
-
-## 🔧 Solución de Problemas
-
-### Error: "File already exists"
-- Ya existe esa versión en PyPI
-- Incrementar el número de versión
-
-### Error: "Invalid distribution"
-- Ejecutar `make check` para ver detalles
-- Verificar que README.md es válido Markdown
-- Verificar que todos los archivos necesarios están en MANIFEST.in
-
-### Error: "Authentication failed"
-- Verificar que el token en `~/.pypirc` es correcto
-- Verificar que el token no ha expirado
-
-### Archivos faltantes en el paquete
-- Actualizar MANIFEST.in
-- Ejecutar `check-manifest` para verificar
+- [ ] `MANIFEST.in` está actualizado (`make check`)
+- [ ] Versión actualizada en `pyproject.toml` y `src/tecnofact/__init__.py`
+- [ ] `CHANGELOG.md` actualizado
+- [ ] PR aprobado y mergeado a `main`
+- [ ] Release creado en GitHub con el tag correcto
+- [ ] Workflow `Publish to PyPI` finalizó correctamente
+- [ ] Paquete disponible en https://pypi.org/project/tecnofact-sdk/
 
 ## 📚 Referencias
 
 - [PyPI Documentation](https://docs.pypi.org/)
 - [Python Packaging Guide](https://packaging.python.org/)
-- [Twine Documentation](https://twine.readthedocs.io/)
+- [Trusted Publishing](https://docs.pypi.org/trusted-publishers/)
 - [Semantic Versioning](https://semver.org/)
