@@ -1,7 +1,7 @@
 # TecnoFact SDK para Facturación Electrónica CFDI 4.0
 
-[![PyPI version](https://badge.fury.io/py/tecnofact-sdk.svg)](https://badge.fury.io/py/tecnofact-sdk)
-[![Python Versions](https://img.shields.io/pypi/pyversions/tecnofact-sdk.svg)](https://pypi.org/project/tecnofact-sdk/)
+[![PyPI version](https://badge.fury.io/py/sdk-tecnofact-python.svg)](https://badge.fury.io/py/sdk-tecnofact-python)
+[![Python Versions](https://img.shields.io/pypi/pyversions/sdk-tecnofact-python.svg)](https://pypi.org/project/sdk-tecnofact-python/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/TecnoFact/SDK-tecnofact-python/workflows/Tests/badge.svg)](https://github.com/TecnoFact/SDK-tecnofact-python/actions)
 [![codecov](https://codecov.io/gh/TecnoFact/SDK-tecnofact-python/branch/main/graph/badge.svg)](https://codecov.io/gh/TecnoFact/SDK-tecnofact-python)
@@ -47,10 +47,10 @@ SDK oficial de Python para la integración con el servicio de Timbrado CFDI 4.0 
 
 ```bash
 # Instalación desde PyPI
-pip install tecnofact-sdk
+pip install sdk-tecnofact-python
 
 # O especificando una versión
-pip install tecnofact-sdk==1.0.0
+pip install sdk-tecnofact-python==1.1.1
 ```
 
 ### Desde el código fuente
