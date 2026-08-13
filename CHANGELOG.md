@@ -7,6 +7,12 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-08-13
+
+### Corregido
+- Renombrado el proyecto en PyPI de `tecnofact-sdk` a `sdk-tecnofact-python` para coincidir con el proyecto existente en PyPI.
+- Corregida la cadena de workflows de GitHub Actions para que `create-release.yml` dispare explícitamente `publish.yml` después de crear un release.
+
 ## [1.1.0] - 2026-08-13
 
 ### Agregado
@@ -108,5 +114,6 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Manejo robusto de errores
 - Serialización a diccionarios
 
+[1.1.1]: https://github.com/TecnoFact/SDK-tecnofact-python/releases/tag/v1.1.1
 [1.1.0]: https://github.com/TecnoFact/SDK-tecnofact-python/releases/tag/v1.1.0
 [1.0.0]: https://github.com/TecnoFact/SDK-tecnofact-python/releases/tag/v1.0.0
